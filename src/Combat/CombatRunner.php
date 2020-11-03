@@ -3,11 +3,7 @@
 namespace Combat;
 
 use Combat\Models\Logger;
-use Unit\Builders\HeroBuilder;
-use Unit\Builders\MonsterBuilder;
 use Unit\Entities\UnitInterface;
-use Unit\Models\Hero;
-use Unit\Models\Monster;
 
 class CombatRunner
 {
@@ -18,12 +14,15 @@ class CombatRunner
     /** @var UnitInterface|null */
     protected $winner = null;
 
-    public function runSimulation()
+    /**
+     * @param UnitInterface $combatant1
+     * @param UnitInterface $combatant2
+     * @return bool
+     */
+    public function runSimulation(UnitInterface $combatant1, UnitInterface $combatant2)
     {
-        $hero = HeroBuilder::build();
-        $monster = MonsterBuilder::build();
-        $this->logActorGeneration($hero, $monster);
-        $this->settleStartingPositions($hero, $monster);
+        $this->logActorGeneration($combatant1, $combatant2);
+        $this->settleStartingPositions($combatant1, $combatant2);
         $roundCounter = 0;
         $logger = new Logger();
         while ($roundCounter<20) {
@@ -42,31 +41,43 @@ class CombatRunner
     }
 
     /**
-     * @param Hero $hero
-     * @param Monster $monster
+     * @param UnitInterface $combatant1
+     * @param UnitInterface $combatant2
      */
-    protected function logActorGeneration($hero, $monster)
+    protected function logActorGeneration(UnitInterface $combatant1, UnitInterface $combatant2)
     {
+        if (method_exists($combatant1, 'getName')) {
+            $cName1 = $combatant1->getName();
+        } else {
+            $cName1 = "Wild Beast";
+        }
+
+        if (method_exists($combatant2, 'getName')) {
+            $cName2 = $combatant2->getName();
+        } else {
+            $cName2 = "Wild Beast";
+        }
+
         echo "Running new combat simulation ...<br/><br/>";
-        echo "Hero was generated with the following stats:<br/>";
-        echo "● Health: " . $hero->getHealth() . "<br/>";
-        echo "● Strength: " . $hero->getStrength() . "<br/>";
-        echo "● Defence: " . $hero->getDefence() . "<br/>";
-        echo "● Speed: " . $hero->getSpeed() . "<br/>";
-        echo "● Luck: " . $hero->getLuck() . "%<br/><br/>";
-        echo "Wild beast was generated with the following stats:<br/>";
-        echo "● Health: " . $monster->getHealth() . "<br/>";
-        echo "● Strength: " . $monster->getStrength() . "<br/>";
-        echo "● Defence: " . $monster->getDefence() . "<br/>";
-        echo "● Speed: " . $monster->getSpeed() . "<br/>";
-        echo "● Luck: " . $monster->getLuck() . "%<br/><br/>";
+        echo $cName1 . " was generated with the following stats:<br/>";
+        echo "● Health: " . $combatant1->getHealth() . "<br/>";
+        echo "● Strength: " . $combatant1->getStrength() . "<br/>";
+        echo "● Defence: " . $combatant1->getDefence() . "<br/>";
+        echo "● Speed: " . $combatant1->getSpeed() . "<br/>";
+        echo "● Luck: " . $combatant1->getLuck() . "%<br/><br/>";
+        echo $cName2 . " was generated with the following stats:<br/>";
+        echo "● Health: " . $combatant2->getHealth() . "<br/>";
+        echo "● Strength: " . $combatant2->getStrength() . "<br/>";
+        echo "● Defence: " . $combatant2->getDefence() . "<br/>";
+        echo "● Speed: " . $combatant2->getSpeed() . "<br/>";
+        echo "● Luck: " . $combatant2->getLuck() . "%<br/><br/>";
     }
 
     /**
      * @param UnitInterface $combatant1
      * @param UnitInterface $combatant2
      */
-    protected function settleStartingPositions($combatant1, $combatant2)
+    protected function settleStartingPositions(UnitInterface $combatant1, UnitInterface $combatant2)
     {
         $sortingPot = [$combatant1, $combatant2];
         usort($sortingPot, [$this, 'compareCombatants']);
@@ -79,7 +90,7 @@ class CombatRunner
      * @param $b
      * @return mixed
      */
-    protected function compareCombatants($a, $b) {
+    public function compareCombatants($a, $b) {
         $result = $b->getSpeed() - $a->getSpeed();
         if ($result === 0) {
             $result = $b->getLuck() - $a->getLuck();
@@ -91,11 +102,14 @@ class CombatRunner
      * @param UnitInterface $attacker
      * @param UnitInterface $defender
      */
-    protected function swapPositions($attacker, $defender) {
+    protected function swapPositions(UnitInterface $attacker, UnitInterface $defender) {
         $this->setAttacker($defender);
         $this->setDefender($attacker);
     }
 
+    /**
+     * Just a separation of code from the main method
+     */
     protected function logEndCombat() {
         if ($this->getWinner() !== null) {
             if (method_exists($this->getWinner(),'getName')) {
@@ -112,14 +126,14 @@ class CombatRunner
     /**
      * @param UnitInterface $winner
      */
-    protected function declareWinner($winner) {
+    protected function declareWinner(UnitInterface $winner) {
         $this->winner = $winner;
     }
 
     /**
      * @return UnitInterface
      */
-    protected function getWinner()
+    public function getWinner()
     {
         return $this->winner;
     }
@@ -136,7 +150,7 @@ class CombatRunner
      * @param UnitInterface $attacker
      * @return CombatRunner
      */
-    protected function setAttacker($attacker)
+    protected function setAttacker(UnitInterface $attacker)
     {
         $this->attacker = $attacker;
         return $this;
@@ -154,7 +168,7 @@ class CombatRunner
      * @param UnitInterface $defender
      * @return CombatRunner
      */
-    protected function setDefender($defender)
+    protected function setDefender(UnitInterface $defender)
     {
         $this->defender = $defender;
         return $this;

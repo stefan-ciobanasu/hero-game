@@ -7,6 +7,9 @@ use Unit\Models\Monster;
 
 class MonsterBuilder
 {
+    /**
+     * @return Monster
+     */
     public static function build()
     {
         return new Monster(

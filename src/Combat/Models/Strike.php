@@ -31,6 +31,13 @@ class Strike implements StrikeInterface
     protected $damageDone;
     /** @var Logger */
     protected $logger = '';
+
+    /**
+     * Strike constructor.
+     * @param UnitInterface $attacker
+     * @param UnitInterface $defender
+     * @param Logger $logger
+     */
     public function __construct(
         UnitInterface $attacker,
         UnitInterface $defender,
@@ -42,24 +49,21 @@ class Strike implements StrikeInterface
         $this->logger = $logger;
     }
 
+    /**
+     * @return StrikeInterface
+     */
     public function resolveStrike()
     {
         $this->collectSkills();
         $this->applyPreStrikeSkills();
         $this->calculateCombatValues();
         $this->applyPostStrikeSkills();
+        return $this;
     }
 
-    public function getAttacker()
-    {
-        return $this->attacker;
-    }
-
-    public function getDefender()
-    {
-        return $this->defender;
-    }
-
+    /**
+     * @return StrikeInterface
+     */
     protected function collectSkills()
     {
         $skillCollection = [];
@@ -73,6 +77,9 @@ class Strike implements StrikeInterface
         return $this;
     }
 
+    /**
+     * @return StrikeInterface
+     */
     protected function applyPreStrikeSkills()
     {
         $preStrikeSkills = $this->getSkillCollection()->getSkillsByTiming(SkillTiming::PRE_STRIKE);
@@ -82,6 +89,9 @@ class Strike implements StrikeInterface
         return $this;
     }
 
+    /**
+     * @return StrikeInterface
+     */
     protected function calculateCombatValues()
     {
         $strength = intval($this->getAttacker()->getStrength() * $this->getStrengthMultiplier()) + $this->getAddedFlatStrength();
@@ -96,13 +106,34 @@ class Strike implements StrikeInterface
         return $this;
     }
 
+    /**
+     * @return StrikeInterface
+     */
     protected function applyPostStrikeSkills()
     {
-        $postStrikeSkills = $this->getSkillCollection()->getSkillsByTiming(SkillTiming::POST_STRIKE);
-        foreach ($postStrikeSkills as $skill) {
-            $skill->applySkillEffects($this);
+        if ($this->getDefender()->getHealth() > 0) {
+            $postStrikeSkills = $this->getSkillCollection()->getSkillsByTiming(SkillTiming::POST_STRIKE);
+            foreach ($postStrikeSkills as $skill) {
+                $skill->applySkillEffects($this);
+            }
         }
         return $this;
+    }
+
+    /**
+     * @return UnitInterface
+     */
+    public function getAttacker()
+    {
+        return $this->attacker;
+    }
+
+    /**
+     * @return UnitInterface
+     */
+    public function getDefender()
+    {
+        return $this->defender;
     }
 
     /**
@@ -117,14 +148,14 @@ class Strike implements StrikeInterface
      * @param int $addedFlatStrength
      * @return Strike
      */
-    public function setAddedFlatStrength($addedFlatStrength)
+    public function setAddedFlatStrength(int $addedFlatStrength)
     {
         $this->addedFlatStrength = $addedFlatStrength;
         return $this;
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getStrengthMultiplier()
     {
@@ -132,10 +163,10 @@ class Strike implements StrikeInterface
     }
 
     /**
-     * @param int $strengthMultiplier
+     * @param float $strengthMultiplier
      * @return Strike
      */
-    public function setStrengthMultiplier($strengthMultiplier)
+    public function setStrengthMultiplier(float $strengthMultiplier)
     {
         $this->strengthMultiplier = $strengthMultiplier;
         return $this;
@@ -153,14 +184,14 @@ class Strike implements StrikeInterface
      * @param int $addedFlatDefense
      * @return Strike
      */
-    public function setAddedFlatDefense($addedFlatDefense)
+    public function setAddedFlatDefense(int $addedFlatDefense)
     {
         $this->addedFlatDefense = $addedFlatDefense;
         return $this;
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getDefenseMultiplier()
     {
@@ -168,17 +199,17 @@ class Strike implements StrikeInterface
     }
 
     /**
-     * @param int $defenseMultiplier
+     * @param float $defenseMultiplier
      * @return Strike
      */
-    public function setDefenseMultiplier($defenseMultiplier)
+    public function setDefenseMultiplier(float $defenseMultiplier)
     {
         $this->defenseMultiplier = $defenseMultiplier;
         return $this;
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getPercentageDamageReduction()
     {
@@ -186,10 +217,10 @@ class Strike implements StrikeInterface
     }
 
     /**
-     * @param int $percentageDamageReduction
+     * @param float $percentageDamageReduction
      * @return Strike
      */
-    public function setPercentageDamageReduction($percentageDamageReduction)
+    public function setPercentageDamageReduction(float $percentageDamageReduction)
     {
         $this->percentageDamageReduction = $percentageDamageReduction;
         return $this;
@@ -207,7 +238,7 @@ class Strike implements StrikeInterface
      * @param int $flatDamageReduction
      * @return Strike
      */
-    public function setFlatDamageReduction($flatDamageReduction)
+    public function setFlatDamageReduction(int $flatDamageReduction)
     {
         $this->flatDamageReduction = $flatDamageReduction;
         return $this;
@@ -225,7 +256,7 @@ class Strike implements StrikeInterface
      * @param SkillCollection $skillCollection
      * @return Strike
      */
-    public function setSkillCollection($skillCollection)
+    public function setSkillCollection(SkillCollection $skillCollection)
     {
         $this->skillCollection = $skillCollection;
         return $this;

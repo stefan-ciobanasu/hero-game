@@ -13,6 +13,10 @@ interface StrikeInterface
      * @return UnitInterface
      */
     public function getDefender();
+
+    /**
+     * @return StrikeInterface
+     */
     public function resolveStrike();
 
     /**
@@ -24,18 +28,18 @@ interface StrikeInterface
      * @param int $addedFlatStrength
      * @return StrikeInterface
      */
-    public function setAddedFlatStrength($addedFlatStrength);
+    public function setAddedFlatStrength(int $addedFlatStrength);
 
     /**
-     * @return int
+     * @return float
      */
     public function getStrengthMultiplier();
 
     /**
-     * @param int $strengthMultiplier
+     * @param float $strengthMultiplier
      * @return StrikeInterface
      */
-    public function setStrengthMultiplier($strengthMultiplier);
+    public function setStrengthMultiplier(float $strengthMultiplier);
 
     /**
      * @return int
@@ -46,35 +50,35 @@ interface StrikeInterface
      * @param int $addedFlatDefense
      * @return StrikeInterface
      */
-    public function setAddedFlatDefense($addedFlatDefense);
+    public function setAddedFlatDefense(int $addedFlatDefense);
 
     /**
-     * @return int
+     * @return float
      */
     public function getDefenseMultiplier();
 
     /**
-     * @param int $defenseMultiplier
+     * @param float $defenseMultiplier
      * @return StrikeInterface
      */
-    public function setDefenseMultiplier($defenseMultiplier);
+    public function setDefenseMultiplier(float $defenseMultiplier);
 
     /**
-     * @param int $percentageDamageReduction
+     * @param float $percentageDamageReduction
      * @return StrikeInterface
      */
-    public function setPercentageDamageReduction($percentageDamageReduction);
+    public function setPercentageDamageReduction(float $percentageDamageReduction);
 
     /**
-     * @return int
+     * @return float
      */
     public function getPercentageDamageReduction();
 
     /**
-     * @param $flatDamageReduction
+     * @param int $flatDamageReduction
      * @return StrikeInterface
      */
-    public function setFlatDamageReduction($flatDamageReduction);
+    public function setFlatDamageReduction(int $flatDamageReduction);
 
     /**
      * @return int

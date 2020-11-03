@@ -14,7 +14,7 @@ interface UnitInterface
      * @param int $health
      * @return UnitInterface
      */
-    public function setHealth($health);
+    public function setHealth(int $health);
 
     /**
      * @return int
@@ -45,5 +45,5 @@ interface UnitInterface
      * @param SkillCollection $skills
      * @return UnitInterface
      */
-    public function setSkills($skills);
+    public function setSkills(SkillCollection $skills);
 }

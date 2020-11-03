@@ -60,7 +60,7 @@ class Monster implements UnitInterface
      * @param int $health
      * @return Monster
      */
-    public function setHealth($health)
+    public function setHealth(int $health)
     {
         $this->health = $health;
         return $this;
@@ -110,7 +110,7 @@ class Monster implements UnitInterface
      * @param SkillCollection $skills
      * @return UnitInterface
      */
-    public function setSkills($skills)
+    public function setSkills(SkillCollection $skills)
     {
         $this->skills = $skills;
         return $this;

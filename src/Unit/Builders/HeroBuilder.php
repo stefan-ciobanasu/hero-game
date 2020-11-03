@@ -9,9 +9,11 @@ use Unit\Models\Hero;
 
 class HeroBuilder
 {
+    /**
+     * @return Hero
+     */
     public static function build()
     {
-
         $skills = new SkillCollection();
         $skills->addSkill(new RapidStrike());
         $skills->addSkill(new MagicShield());

@@ -10,7 +10,9 @@ class SkillCollection
 
     public function __construct($skillCollection=[])
     {
-        $this->skillCollection = $skillCollection;
+        foreach ($skillCollection as $skill) {
+            $this->addSkill($skill);
+        }
     }
 
     /**
@@ -61,7 +63,7 @@ class SkillCollection
      * @param string $type
      * @return array|Skill
      */
-    public function getSkillsByType($type)
+    public function getSkillsByType(string $type)
     {
         $returnCollection = [];
         foreach ($this->skillCollection as $skill)
@@ -77,7 +79,7 @@ class SkillCollection
      * @param string $timing
      * @return array|Skill
      */
-    public function getSkillsByTiming($timing)
+    public function getSkillsByTiming(string $timing)
     {
         $returnCollection = [];
         foreach ($this->skillCollection as $skill)

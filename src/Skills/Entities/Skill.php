@@ -3,76 +3,35 @@ namespace Skills\Entities;
 
 use Combat\Entities\StrikeInterface;
 
-abstract class Skill
+interface Skill
 {
     /**
-     * @var string
+     * @return string
      */
-    protected $name;
-    /**
-     * @var string
-     */
-    protected $description;
-    /**
-     * @var int
-     */
-    protected $activationChance;
-    /**
-     * @var string
-     */
-    protected $type;
-    /**
-     * @var string
-     */
-    protected $timing;
+    public function getName();
 
     /**
      * @return string
      */
-    public function getName()
-    {
-        return $this->name;
-    }
-    /**
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
+    public function getDescription();
+
     /**
      * @return int
      */
-    public function getActivationChance()
-    {
-        return $this->activationChance;
-    }
-    /**
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
+    public function getActivationChance();
 
     /**
      * @return string
      */
-    public function getTiming()
-    {
-        return $this->timing;
-    }
+    public function getType();
+
+    /**
+     * @return string
+     */
+    public function getTiming();
 
     /**
      * @param StrikeInterface $strike
      */
-    public function applySkillEffects(StrikeInterface $strike) {}
-
-    /**
-     * @return bool
-     */
-    protected function skillActivates()
-    {
-        return (mt_rand(0,100) < $this->getActivationChance());
-    }
+    public function applySkillEffects(StrikeInterface $strike);
 }
